@@ -1,6 +1,9 @@
 from datetime import date
 
+
 class Medicine:
+    """class representing a medicine"""
+
     def __init__(self, name, price, quantity, is_prescription_needed, expiration_date):
         """ініціалізація"""
         self.__name = name
@@ -10,12 +13,22 @@ class Medicine:
         self.__expiration_date = expiration_date
 
     def __str__(self):
-        """повертає рядок, що містить опис медикаменту."""
-        return f"Medicine: {self.__name}, price: {self.__price}, expiration date: {self.__expiration_date}"
+        """returns description of the medicine"""
+        return (
+            f"Medicine: {self.__name},"
+            f"price: {self.__price},"
+            f"expiration date: {self.__expiration_date}"
+        )
 
     def __repr__(self):
-        """повертає рядок, що містить конструктор обʼєкта медикаменту"""
-        return f"Medicine({self.__name}, {self.__price}, {self.__quantity}, {self.__is_prescription_needed}, {self.__expiration_date})"
+        """ruturns string representation of the Medicine object"""
+        return (
+            f"Medicine({self.__name},"
+            f"{self.__price},"
+            f"{self.__quantity},"
+            f"{self.__is_prescription_needed}, "
+            f"{self.__expiration_date})"
+        )
 
     def is_expired(self):
         today = date.today()
@@ -39,31 +52,39 @@ class Medicine:
     def set_price(self, new_price):
         self.__price = new_price
 
+
 class Pharmacy:
+    """class representing a pharmacy"""
+
     def __init__(self):
         self.medicines = []
 
     def remove_expired_medicines(self):
         today = date.today()
-        self.medicines = [med for med in self.medicines if med.get_expiration_date() >= today]
+        self.medicines = [
+            med for med in self.medicines if med.get_expiration_date() >= today
+        ]
 
     def apply_discount(self):
         for med in self.medicines:
             med.set_price(med.get_price() * 0.9)
 
     def get_cheapest_medicines(self, num):
-        sorted_medicines = sorted(self.medicines, key = lambda x: x.get_price())
+        sorted_medicines = sorted(self.medicines, key=lambda x: x.get_price())
         return [(med.get_name(), med.get_price()) for med in sorted_medicines[:num]]
 
     def add_medicine(self, medicine):
         self.medicines.append(medicine)
 
     def remove_medicine(self, medicine_name):
-        for med in self.medicines:
+        for med in self.medicines[:]:
             if med.get_name() == medicine_name:
                 self.medicines.remove(med)
-                return
-        print("The medicine isn't found in the pharmacy.")
+            print(f"The medicine {medicine_name} has been removed from the pharmacy.")
+            return
+
+    print("The medicine isn't found in the pharmacy.")
+
 
 if __name__ == "__main__":
     medicine1 = Medicine("Aspirin", 5, 50, False, date(2023, 12, 31))
@@ -81,27 +102,33 @@ if __name__ == "__main__":
     pharmacy.add_medicine(medicine5)
 
     print("Original Medicines:")
-    for med in pharmacy.medicines:
-        print(f"{med.get_name()}: ${med.get_price()}, Expired: {med.is_expired()}")
+    for current_medicine in pharmacy.medicines:
+        print(
+            f"{current_medicine.get_name()}:"
+            f"${current_medicine.get_price()},"
+            f"Expired: {current_medicine.is_expired()}"
+        )
 
     pharmacy.remove_expired_medicines()
     print("\nMedicines after removing expired:")
-    for med in pharmacy.medicines:
-        print(f"{med.get_name()}: ${med.get_price()}, Expired: {med.is_expired()}")
+    for current_medicine in pharmacy.medicines:
+        print(
+            f"{current_medicine.get_name()}:"
+            f"${current_medicine.get_price()}, "
+            f"Expired: {current_medicine.is_expired()}"
+        )
 
     pharmacy.apply_discount()
     print("\nMedicines after applying discount:")
-    for med in pharmacy.medicines:
-        print(f"{med.get_name()}: ${med.get_price()}")
+    for current_medicine in pharmacy.medicines:
+        print(f"{current_medicine.get_name()}, " f" ${current_medicine.get_price()}")
 
     print("\nTop 2 cheapest medicines:")
     top_cheapest = pharmacy.get_cheapest_medicines(2)
-    for med in top_cheapest:
-        print(f"{med[0]}: ${med[1]}")
+    for current_medicine in top_cheapest:
+        print(f"{current_medicine[0]}: ${current_medicine[1]}")
 
     pharmacy.remove_medicine("Paracetamol")
     print("\nMedicines after removing Paracetamol:")
-    for med in pharmacy.medicines:
-        print(f"{med.get_name()}: ${med.get_price()}")
-
-    
+    for current_medicine in pharmacy.medicines:
+        print(f"{current_medicine.get_name()}: ${current_medicine.get_price()}")
